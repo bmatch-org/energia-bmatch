@@ -154,9 +154,9 @@ export function ConsentForm() {
                   </p>
                   <ul className="list-disc pl-6 mt-2 space-y-1">
                     <li>Calcular y aplicar descuentos correspondientes</li>
-                    <li>Generar análisis de consumo y recomendaciones de eficiencia</li>
+                    <li>Generar análisis de consumo, recomendaciones de eficiencia y generar conciencia</li>
                     <li>Enviar comunicaciones sobre promociones y beneficios exclusivos</li>
-                    <li>Elaborar estadísticas agregadas y anónimas</li>
+                    <li>Elaborar estudios de mercado y estadísticas agregadas y anónimas</li>
                   </ul>
                 </div>
 
