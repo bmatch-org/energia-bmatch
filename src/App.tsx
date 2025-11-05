@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ConsentForm } from './components/ConsentForm';
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
+import { Toaster } from 'sonner';
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
 
         {/* Main content */}
         <ConsentForm />
+        <Toaster position="bottom-right" richColors />
       </div>
     </div>
   );

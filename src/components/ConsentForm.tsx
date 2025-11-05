@@ -6,6 +6,8 @@ import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
+import { validarRut, normalizarRut, validarEmail } from '@/utils/validation';
+
 
 export function ConsentForm() {
   const [step, setStep] = useState(1);
@@ -26,6 +28,10 @@ export function ConsentForm() {
       toast.error('Por favor complete todos los campos');
       return;
     }
+    if (!validarRut(formData.rut)) {
+    toast.error('RUT inválido');
+    return;
+  }
     setStep(2);
   };
 
@@ -37,6 +43,11 @@ export function ConsentForm() {
     if (!formData.email) {
       toast.error('Por favor ingrese su correo electrónico');
       return;
+    }
+
+    if (!validarEmail(formData.email)) {
+    toast.error('Email inválido');
+    return;
     }
     
     // Aquí se envía la información al backend
