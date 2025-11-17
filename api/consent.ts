@@ -5,6 +5,7 @@ import { put } from '@vercel/blob';
 type Payload = {
   nombre: string;
   rutEmpresa: string;
+  razonSocial: string;
   email: string;
   aceptaTerminos: boolean;
 };
@@ -15,12 +16,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = typeof req.body === 'string' ? safeJSON(req.body) : req.body || {};
-  const { nombre = '', rutEmpresa = '', email = '', aceptaTerminos = false } = body as Payload;
+  const { nombre = '', rutEmpresa = '', razonSocial = '', email = '', aceptaTerminos = false } = body as Payload;
 
   if (!aceptaTerminos) {
     return res.status(400).json({ ok: false, error: 'Debe aceptar los términos.' });
   }
-  if (!nombre.trim() || !rutEmpresa.trim() || !email.trim()) {
+  if (!nombre.trim() || !rutEmpresa.trim() || !razonSocial.trim() || !email.trim()) {
     return res.status(400).json({ ok: false, error: 'Faltan campos obligatorios.' });
   }
   if (!validarEmail(email)) {
@@ -33,6 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const record = {
     nombre: nombre.trim(),
     rutEmpresa: normalizarRut(rutEmpresa.trim()),
+    razonSocial: razonSocial.trim(),
     email: email.trim(),
     aceptaTerminos: true,
     acceptedAt: new Date().toISOString(),
