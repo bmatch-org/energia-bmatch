@@ -13,6 +13,7 @@ export function ConsentForm() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     rut: '',
+    razonSocial: '',
     nombre: '',
     email: '',
     aceptaTerminos: false,
@@ -24,7 +25,7 @@ export function ConsentForm() {
   };
 
   const handleNextStep = () => {
-    if (!formData.rut || !formData.nombre) {
+    if (!formData.rut || !formData.razonSocial || !formData.nombre) {
       toast.error('Por favor complete todos los campos');
       return;
     }
@@ -59,6 +60,7 @@ export function ConsentForm() {
           body: JSON.stringify({
             nombre: formData.nombre,
             rutEmpresa: formData.rut,   // o como se llame tu campo
+            razonSocial: formData.razonSocial,
             email: formData.email,
             aceptaTerminos: formData.aceptaTerminos,
           }),
@@ -126,6 +128,16 @@ export function ConsentForm() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="razonsocial">Nombre de la Empresa</Label>
+              <Input
+                id="razonSocial"
+                placeholder="Bmatch"
+                value={formData.razonSocial}
+                onChange={(e) => handleInputChange('razonSocial', e.target.value)}
+                className="bg-input-background"
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="nombre">Nombre del Autorizador</Label>
               <Input
                 id="nombre"
@@ -172,7 +184,7 @@ export function ConsentForm() {
               <h3 className="mb-4">Autorización de Uso de Datos de Consumo</h3>
               
               <p className="mb-4">
-                Yo, <strong>{formData.nombre}</strong>, en representación de la empresa identificada con RUT <strong>{formData.rut}</strong>, 
+                Yo, <strong>{formData.nombre}</strong>, en representación de la empresa <strong>{formData.razonSocial}</strong> con RUT <strong>{formData.rut}</strong>, 
                 autorizo expresamente a las empresas participantes del presente convenio a:
               </p>
 
