@@ -55,6 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       access: 'public',
       contentType: 'application/json',
       addRandomSuffix: true,
+      token,
     });
     return res.status(201).json({ ok: true, id: result.pathname });
   } catch (e: any){
