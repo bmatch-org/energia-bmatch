@@ -33,7 +33,7 @@ export default function App() {
             </div>
           </div>
           <h1 className="text-center text-primary">
-            Convenio de Descuentos en Energía
+            Convenio de Descuento en Energía
           </h1>
           <p className="text-center text-muted-foreground mt-2">
             Autorización para el uso de datos de consumo
