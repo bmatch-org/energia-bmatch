@@ -47,8 +47,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const token = process.env.BLOB_IMELSA_READ_WRITE_TOKEN;
     if (!token) {
-      console.error('[consent] Falta BLOB_READ_WRITE_TOKEN');
-      return res.status(500).json({ ok: false, error: 'Falta BLOB_READ_WRITE_TOKEN' });
+      console.error('[consent] Falta BLOB_IMELSA_READ_WRITE_TOKEN');
+      return res.status(500).json({ ok: false, error: 'Falta BLOB_IMELSA_READ_WRITE_TOKEN' });
     }
     
     const result = await put(filename, JSON.stringify(record), {
