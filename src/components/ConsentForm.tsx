@@ -53,7 +53,7 @@ export function ConsentForm() {
     
     // Aquí se envía la información al backend
     try {
-        // Aquí reemplazamos el comentario por este fetch
+        
         const res = await fetch('/api/consent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
