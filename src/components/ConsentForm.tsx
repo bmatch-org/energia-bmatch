@@ -14,6 +14,8 @@ export function ConsentForm() {
   const [formData, setFormData] = useState({
     rut: '',
     razonSocial: '',
+    rutRepresentante: '',
+    telefono: '',
     nombre: '',
     email: '',
     aceptaTerminos: false,
@@ -25,14 +27,18 @@ export function ConsentForm() {
   };
 
   const handleNextStep = () => {
-    if (!formData.rut || !formData.razonSocial || !formData.nombre) {
+    if (!formData.rut || !formData.razonSocial || !formData.nombre || !formData.telefono || !formData.rutRepresentante) {
       toast.error('Por favor complete todos los campos');
       return;
     }
     if (!validarRut(formData.rut)) {
-    toast.error('RUT inválido');
-    return;
-  }
+      toast.error('RUT de empresa inválido');
+      return;
+    }
+    if (!validarRut(formData.rutRepresentante)) {
+      toast.error('RUT del representante inválido');
+      return;
+    }
     setStep(2);
   };
 
@@ -47,8 +53,8 @@ export function ConsentForm() {
     }
 
     if (!validarEmail(formData.email)) {
-    toast.error('Email inválido');
-    return;
+      toast.error('Email inválido');
+      return;
     }
     
     // Aquí se envía la información al backend
@@ -58,9 +64,11 @@ export function ConsentForm() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nombre: formData.nombre,
-            rutEmpresa: formData.rut,   // o como se llame tu campo
             razonSocial: formData.razonSocial,
+            rutEmpresa: formData.rut,
+            nombre: formData.nombre,
+            rutRepresentante: formData.rutRepresentante,
+            telefono: formData.telefono,
             email: formData.email,
             aceptaTerminos: formData.aceptaTerminos,
           }),
@@ -111,43 +119,83 @@ export function ConsentForm() {
       {step === 1 ? (
         <>
           <CardHeader>
-            <CardTitle>Datos del Autorizador</CardTitle>
+            <CardTitle>Datos de la Empresa</CardTitle>
             <CardDescription>
-              Por favor ingrese la información de la empresa y del autorizador
+              Por favor ingrese la información de la empresa y del representante
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="rut">RUT de la Empresa</Label>
-              <Input
-                id="rut"
-                placeholder="12.345.678-9"
-                value={formData.rut}
-                onChange={(e) => handleInputChange('rut', e.target.value)}
-                className="bg-input-background"
-              />
+            {/* --- Fila 1: Empresa --- */}
+            <div className="flex gap-6">
+              {/* Columna 1: RUT Empresa */}
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="rut">RUT de la Empresa</Label>
+                <Input
+                  id="rut"
+                  placeholder="12.345.678-9"
+                  value={formData.rut}
+                  onChange={(e) => handleInputChange('rut', e.target.value)}
+                  className="bg-input-background"
+                />
+              </div>
+
+              {/* Columna 2: Nombre Empresa */}
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="razonSocial">Nombre de la Empresa</Label>
+                <Input
+                  id="razonSocial"
+                  placeholder="Bmatch"
+                  value={formData.razonSocial}
+                  onChange={(e) => handleInputChange('razonSocial', e.target.value)}
+                  className="bg-input-background"
+                />
+              </div>
+
+              {/* Columna 3 vacía, solo para alinear con la fila de abajo */}
+              <div className="flex-1" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="razonsocial">Nombre de la Empresa</Label>
-              <Input
-                id="razonSocial"
-                placeholder="Bmatch"
-                value={formData.razonSocial}
-                onChange={(e) => handleInputChange('razonSocial', e.target.value)}
-                className="bg-input-background"
-              />
+
+            {/* --- Fila 2: Representante --- */}
+            <div className="flex gap-6">
+              
+              {/* Columna 1: RUT Representante */}
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="rutRepresentante">RUT del Representante</Label>
+                <Input
+                  id="rutRepresentante"
+                  placeholder="12.345.678-9"
+                  value={formData.rutRepresentante}
+                  onChange={(e) => handleInputChange('rutRepresentante', e.target.value)}
+                  className="bg-input-background"
+                />
+              </div>
+
+              {/* Columna 2: Nombre Representante */}
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="nombre">Nombre del Representante</Label>
+                <Input
+                  id="nombre"
+                  placeholder="Juan Pérez González"
+                  value={formData.nombre}
+                  onChange={(e) => handleInputChange('nombre', e.target.value)}
+                  className="bg-input-background"
+                />
+              </div>
+
+              {/* Columna 3: Teléfono Representante */}
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="telefono">Teléfono del Representante</Label>
+                <Input
+                  id="telefono"
+                  placeholder="9 1234 5678"
+                  value={formData.telefono}
+                  onChange={(e) => handleInputChange('telefono', e.target.value)}
+                  className="bg-input-background"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre del Autorizador</Label>
-              <Input
-                id="nombre"
-                placeholder="Juan Pérez González"
-                value={formData.nombre}
-                onChange={(e) => handleInputChange('nombre', e.target.value)}
-                className="bg-input-background"
-              />
-            </div>
-            
+
+
             {/* Benefits highlight */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
               <div className="flex items-start gap-3">

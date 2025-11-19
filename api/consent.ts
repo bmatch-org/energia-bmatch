@@ -3,9 +3,11 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
 
 type Payload = {
-  nombre: string;
-  rutEmpresa: string;
   razonSocial: string;
+  rutEmpresa: string;
+  nombre: string;
+  rutRepresentante: string;
+  telefono: string;
   email: string;
   aceptaTerminos: boolean;
 };
@@ -16,7 +18,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = typeof req.body === 'string' ? safeJSON(req.body) : req.body || {};
-  const { nombre = '', rutEmpresa = '', razonSocial = '', email = '', aceptaTerminos = false } = body as Payload;
+  const { razonSocial = '', rutEmpresa = '', nombre = '', rutRepresentante ='', telefono = '',  email = '', aceptaTerminos = false } = body as Payload;
 
   if (!aceptaTerminos) {
     return res.status(400).json({ ok: false, error: 'Debe aceptar los términos.' });
@@ -32,9 +34,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const record = {
-    nombre: nombre.trim(),
-    rutEmpresa: normalizarRut(rutEmpresa.trim()),
     razonSocial: razonSocial.trim(),
+    rutEmpresa: normalizarRut(rutEmpresa.trim()),
+    nombre: nombre.trim(),
+    rutRepresentante: normalizarRut(rutRepresentante.trim()),
+    telefono: telefono.trim(),
     email: email.trim(),
     aceptaTerminos: true,
     acceptedAt: new Date().toISOString(),
