@@ -104,10 +104,10 @@ export function ConsentForm() {
           </div>
           <h2 className="text-green-700 mb-4">¡Consentimiento Registrado!</h2>
           <p className="text-muted-foreground mb-6">
-            Hemos enviado una confirmación a <strong>{formData.email}</strong>
+            Pronto recibirá una invitación a <strong>{formData.email}</strong> para completar su registro y acceder a los beneficios del convenio.
           </p>
           <p className="text-muted-foreground">
-            Gracias por participar en nuestro programa de descuentos. Pronto recibirá información sobre los beneficios disponibles.
+            Gracias por participar en nuestro programa de descuentos.
           </p>
         </CardContent>
       </Card>
