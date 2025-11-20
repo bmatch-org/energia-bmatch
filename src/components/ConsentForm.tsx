@@ -42,7 +42,7 @@ export function ConsentForm() {
     setStep(2);
   };
 
-  const handleSubmit = async () => {
+    const handleSubmit = async () => {
     if (!formData.aceptaTerminos) {
       toast.error('Debe aceptar los términos y condiciones');
       return;
@@ -59,13 +59,38 @@ export function ConsentForm() {
     
     // Aquí se envía la información al backend
     try {
-        
-        const res = await fetch('/api/consent', {
+      // 1) Guardar consentimiento en tu API actual
+      const res = await fetch('/api/consent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razonSocial: formData.razonSocial,
+          rutEmpresa: formData.rut,
+          nombre: formData.nombre,
+          rutRepresentante: formData.rutRepresentante,
+          telefono: formData.telefono,
+          email: formData.email,
+          aceptaTerminos: formData.aceptaTerminos,
+        }),
+      });
+
+      const raw = await res.text();
+      let data: any = null;
+      try { data = JSON.parse(raw); } catch {}
+
+      if (!res.ok || !data?.ok) {
+        toast.error(data?.error || 'No se pudo registrar el consentimiento');
+        return;
+      }
+
+      // 2) Enviar correo usando la nueva API
+      try {
+        const emailRes = await fetch('/api/send-consent-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            rut: formData.rut,
             razonSocial: formData.razonSocial,
-            rutEmpresa: formData.rut,
             nombre: formData.nombre,
             rutRepresentante: formData.rutRepresentante,
             telefono: formData.telefono,
@@ -74,57 +99,23 @@ export function ConsentForm() {
           }),
         });
 
-        //const data = await res.json();
-        const raw = await res.text();
-
-        let data: any = null;
-        try { data = JSON.parse(raw); } catch {}
-
-        if (!res.ok || !data?.ok) {
-          toast.error(data?.error || 'No se pudo registrar el consentimiento');
-          return;
+        if (!emailRes.ok) {
+          console.error('Error enviando correo de notificación');
+          // opcional: toast.warn('Consentimiento registrado, pero no se pudo enviar el correo');
         }
-
-        setSubmitted(true);
-        toast.success('Consentimiento registrado exitosamente');
-
-        //Envío mail de confirmación con los datos ingresados
-        // using Twilio SendGrid's v3 Node.js Library
-        // https://github.com/sendgrid/sendgrid-nodejs
-
-        const sgMail = require('@sendgrid/mail')
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-        // sgMail.setDataResidency('eu'); 
-        // uncomment the above line if you are sending mail using a regional EU subuser
-
-        const msg = {
-          to: 'mtoledo@nodo.it.com',
-          from: 'noreply@bmatch.cl', 
-          subject: 'Nuevo Registro de Consentimiento de Datos BMATCH'
-          text: 'Se ha registrado un nuevo consentimiento de datos. Detalles:\n\n' +
-                `Razón Social: ${formData.razonSocial}\n` +
-                `RUT Empresa: ${formData.rut}\n` +
-                `Nombre Representante: ${formData.nombre}\n` +
-                `RUT Representante: ${formData.rutRepresentante}\n` +
-                `Teléfono: ${formData.telefono}\n` +
-                `Email: ${formData.email}\n` +
-                `Acepta Términos: ${formData.aceptaTerminos ? 'Sí' : 'No'}\n`,
-          //
-          html: '<strong>Dar de alta el nuevo Partner</strong>',
-        }
-        sgMail
-          .send(msg)
-          .then(() => {
-            console.log('Email sent')
-          })
-          .catch((error) => {
-            console.error(error)
-          })
-        //fin mail de confirmación
       } catch (err) {
-        toast.error('Error de red o de servidor. Intente nuevamente más tarde.');
+        console.error('Error de red enviando correo:', err);
+        // opcional: no frenamos el flujo si solo falla el mail
       }
+
+      setSubmitted(true);
+      toast.success('Consentimiento registrado exitosamente');
+    } catch (err) {
+      console.error(err);
+      toast.error('Error de red o de servidor. Intente nuevamente más tarde.');
+    }
   };
+
 
 
   if (submitted) {
