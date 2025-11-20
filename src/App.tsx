@@ -7,27 +7,27 @@ export default function App() {
     <div className="min-h-screen bg-background flex flex-col items-center p-4">
       {/* Logos */}
       <div className="flex items-center justify-center gap-8 mb-8 flex-wrap">
-        <div className="w-24 h-20 flex items-center justify-center">
+        <div className="h-10 flex items-center justify-center">
           <ImageWithFallback 
             src="/images/logo_santander.png"
             alt="Santander Logo"
-            className="w-full h-full object-contain"
+            className="h-10 w-auto object-contain"
           />
         </div>
 
-        <div className="w-24 h-20 flex items-center justify-center">
+        <div className="h-10 flex items-center justify-center">
           <ImageWithFallback 
             src="/images/logo_imelsa.png"
             alt="Imelsa Logo"
-            className="w-full h-full object-contain"
+            className="h-10 w-auto object-contain"
           />
         </div>
 
-        <div className="w-24 h-20 flex items-center justify-center">
+        <div className="h-10 flex items-center justify-center">
           <ImageWithFallback 
             src="/images/logo_bmatch.png"
             alt="BMatch Logo"
-            className="w-full h-full object-contain"
+            className="h-10 w-auto object-contain"
           />
         </div>
       </div>
