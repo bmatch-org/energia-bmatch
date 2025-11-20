@@ -87,8 +87,42 @@ export function ConsentForm() {
 
         setSubmitted(true);
         toast.success('Consentimiento registrado exitosamente');
+
+        //Envío mail de confirmación con los datos ingresados
+        // using Twilio SendGrid's v3 Node.js Library
+        // https://github.com/sendgrid/sendgrid-nodejs
+
+        const sgMail = require('@sendgrid/mail')
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+        // sgMail.setDataResidency('eu'); 
+        // uncomment the above line if you are sending mail using a regional EU subuser
+
+        const msg = {
+          to: 'mtoledo@nodo.it.com',
+          from: 'noreply@bmatch.cl', 
+          subject: 'Nuevo Registro de Consentimiento de Datos BMATCH'
+          text: 'Se ha registrado un nuevo consentimiento de datos. Detalles:\n\n' +
+                `Razón Social: ${formData.razonSocial}\n` +
+                `RUT Empresa: ${formData.rut}\n` +
+                `Nombre Representante: ${formData.nombre}\n` +
+                `RUT Representante: ${formData.rutRepresentante}\n` +
+                `Teléfono: ${formData.telefono}\n` +
+                `Email: ${formData.email}\n` +
+                `Acepta Términos: ${formData.aceptaTerminos ? 'Sí' : 'No'}\n`,
+          //
+          html: '<strong>Dar de alta el nuevo Partner</strong>',
+        }
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log('Email sent')
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+        //fin mail de confirmación
       } catch (err) {
-        toast.error('Error de red o de servidor');
+        toast.error('Error de red o de servidor. Intente nuevamente más tarde.');
       }
   };
 
